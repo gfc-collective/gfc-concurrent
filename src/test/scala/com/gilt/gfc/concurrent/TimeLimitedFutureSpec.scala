@@ -24,20 +24,20 @@ class TimeLimitedFutureSpec extends WordSpec with Matchers {
 
       "return the failure of the original Future if it fails before the given timeout" in {
         val now = System.currentTimeMillis
-        val future = (Future { Thread.sleep(1000); throw new NullPointerException("That hurts!") }).withTimeout(Duration(2, "seconds"))
+        val future = (Future { Thread.sleep(1000); throw new NullPointerException("That hurts!") }).withTimeout(Duration(5, "seconds"))
         a [NullPointerException] should be thrownBy { Await.result(future, Duration(10, "seconds")) }
         val elapsed = (System.currentTimeMillis - now)
-        elapsed should be (1000L +- 500L)
+        elapsed should be (2000L +- 1000L)
       }
 
       "return the timeout of the original Future if it had one and it went off and was shorter than the given one" in {
         val now = System.currentTimeMillis
-        val timingOutEarlier = Timeouts.timeout(Duration(500, "milliseconds"))
-        val future = timingOutEarlier.withTimeout(Duration(2, "seconds"))
+        val timingOutEarlier = Timeouts.timeout(Duration(1, "seconds"))
+        val future = timingOutEarlier.withTimeout(Duration(5, "seconds"))
         a [TimeoutException] should be thrownBy { Await.result(future, Duration(10, "seconds")) }
         val elapsed: Long = (System.currentTimeMillis - now)
         elapsed should be >= 500l
-        elapsed should be <= 1000l
+        elapsed should be <= 2000l
       }
 
       "return the timeout if the original Future does not timeouts of its own" in {
