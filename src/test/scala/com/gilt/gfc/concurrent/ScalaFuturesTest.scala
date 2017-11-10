@@ -24,7 +24,7 @@ class ScalaFuturesTest extends FunSuite with Matchers {
     await(future) should be(1)
   }
 
-  test("implicit FutureTry flatten") {
+  test("implicit FutureTry tryFlatten") {
     implicit val ec = cachedEc
 
     val f1: Future[Try[String]] = Future.successful(Success("ok"))
@@ -63,24 +63,39 @@ class ScalaFuturesTest extends FunSuite with Matchers {
   test("exists") {
     implicit val ec = cachedEc
 
-    val futures: Seq[Future[Int]] = Seq(1.asFuture, 2.asFuture, 3.asFuture)
+    val existing = 3
+    val nonexistent = 4
+    val futures: Seq[Future[Int]] = Seq(1.asFuture, 2.asFuture, existing.asFuture)
 
-    val trueFuture: Future[Boolean] = ScalaFutures.exists(futures)(_ == 3)
+    val empty: Seq[Future[Int]] = Seq.empty
+
+    val emptySeqFuture: Future[Boolean] = ScalaFutures.exists(empty)(_ == existing)
+    await(emptySeqFuture) should be(false)
+
+    val trueFuture: Future[Boolean] = ScalaFutures.exists(futures)(_ == existing)
     await(trueFuture) should be(true)
 
-    val falseFuture: Future[Boolean] = ScalaFutures.exists(futures)(_ == 4)
+    val falseFuture: Future[Boolean] = ScalaFutures.exists(futures)(_ == nonexistent)
     await(falseFuture) should be(false)
   }
 
   test("forall") {
     implicit val ec = cachedEc
 
-    val futures: Seq[Future[Int]] = Seq(1.asFuture, 2.asFuture, 3.asFuture)
+    val numbers: Seq[Int] = Seq(1, 2, 3)
+    val max: Int = numbers.max
+    val overMax: Int = max + 1
+    val futures: Seq[Future[Int]] = numbers.map(_.asFuture)
 
-    val trueFuture: Future[Boolean] = ScalaFutures.forall(futures)(_ < 4)
+    val empty: Seq[Future[Int]] = Seq.empty
+
+    val emptySeqFuture: Future[Boolean] = ScalaFutures.forall(empty)(_ < overMax)
+    await(emptySeqFuture) should be(true)
+
+    val trueFuture: Future[Boolean] = ScalaFutures.forall(futures)(_ < overMax)
     await(trueFuture) should be(true)
 
-    val falseFuture: Future[Boolean] = ScalaFutures.forall(futures)(_ < 3)
+    val falseFuture: Future[Boolean] = ScalaFutures.forall(futures)(_ < max)
     await(falseFuture) should be(false)
   }
 
@@ -105,6 +120,10 @@ class ScalaFuturesTest extends FunSuite with Matchers {
     val futures: Seq[Future[Int]] = Seq(1.asFuture, 2.asFuture, 3.asFuture)
     val result: Future[Int] = ScalaFutures.foldFast(futures)(0)(_ + _)
     await(result) should be(6)
+
+    val empty: Seq[Future[Int]] = Seq.empty
+    val emptySeqFuture: Future[Int] = ScalaFutures.foldFast(empty)(0)(_ + _)
+    await(emptySeqFuture) should be(0)
   }
 
   test("foldFast fails simple") {
