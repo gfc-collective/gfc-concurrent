@@ -1,12 +1,11 @@
 package com.gilt.gfc.concurrent
 
+import java.util.concurrent.{ScheduledExecutorService => JScheduledExecutorService, Executors}
 import java.util.concurrent.atomic.AtomicReference
-import java.util.{Timer, TimerTask}
 
 import com.gilt.gfc.logging.Loggable
 
 import scala.annotation.tailrec
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NonFatal
 
@@ -45,8 +44,8 @@ object Batcher {
   def apply[R]( name: String
               , maxOutstandingCount: Int
               , maxOutstandingDuration: FiniteDuration
+              , executor: JScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
              )( submitBatch: (Iterable[R]) => Unit
-             )( implicit executor: ExecutionContext
              ): Batcher[R] = {
     require(maxOutstandingCount > 0, s"maxOutstandingCount must be >0")
 
@@ -67,9 +66,10 @@ class BatcherImpl[R] (
 , maxOutstandingCount: Int
 , maxOutstandingDuration: FiniteDuration
 , submitBatch: (Iterable[R]) => Unit
-, executor: ExecutionContext
+, executor: JScheduledExecutorService
 ) extends Batcher[R]
      with Loggable {
+  import JavaConverters._
 
   private[this]
   val emptyBatch = (0, Vector.empty[R])
@@ -83,18 +83,11 @@ class BatcherImpl[R] (
 
   // Flush buffer periodically
   private[this]
-  val flushTask =  new TimerTask {
-    override def run(): Unit = {
-      if (isRunning) {
-        flush()
-      }
+  val task = executor.asScala.scheduleAtFixedRate(maxOutstandingDuration, maxOutstandingDuration) {
+    if (isRunning) {
+      flush()
     }
   }
-
-  private[this]
-  val timer = new Timer
-
-  timer.scheduleAtFixedRate(flushTask, maxOutstandingDuration.toMillis, maxOutstandingDuration.toMillis)
 
 
   /** Add a single record to batch. */
@@ -134,7 +127,7 @@ class BatcherImpl[R] (
   override
   def shutdown(): Unit = {
     isRunning = false
-    timer.cancel()
+    task.cancel(true)
     flush()
   }
 
