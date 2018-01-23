@@ -1,5 +1,6 @@
 package com.gilt.gfc.concurrent
 
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
 import org.scalatest.{FunSuite, Matchers}
@@ -16,6 +17,17 @@ class BatcherTest
   extends FunSuite with Matchers with Eventually {
   implicit val patience = PatienceConfig(scaled(Span(500, Millis)))
 
+  test("check invalid input") {
+    an [IllegalArgumentException] should be thrownBy {
+      Batcher[Int]("test", -1, 1 seconds) { _ => }
+    }
+
+    an [IllegalArgumentException] should be thrownBy {
+      Batcher[Int]("test", 1, -1 seconds) { _ => }
+    }
+  }
+
+
   test("batcher works single-threadedly") {
     for ( maxOutstanding <- (1 to 10) ;
           numRecords <- (1 to 100) ) {
@@ -30,6 +42,33 @@ class BatcherTest
 
       batcher.shutdown()
     }
+  }
+
+
+  test("batcher works after exceptions") {
+    val records = (1 to 1000)
+
+    val adder = new AtomicInteger()
+    val counter = new AtomicInteger()
+
+    val batcher = Batcher[Int](
+      "test"
+      , 1
+      , 1 seconds
+    ) { records =>
+      if (counter.getAndIncrement() % 2 == 0) {
+        throw new RuntimeException
+      }
+      records.foreach(i => adder.addAndGet(i))
+    }
+
+    records.foreach(i => batcher.add(i))
+
+    batcher.flush()
+    adder.intValue shouldBe records.filter(_ % 2 == 0).sum
+    counter.intValue shouldBe records.size
+
+    batcher.shutdown()
   }
 
 
@@ -62,13 +101,36 @@ class BatcherTest
 
 
   test("batcher works concurrently") {
-    val (batcher, adder, _) = mkTestBatcher(10)
+    val batchSize = 10
+    val (batcher, adder, counter) = mkTestBatcher(batchSize)
     val records = (1 to 10000)
 
     val futures = records.map(i => Future{ batcher.add(i) } )
     Await.result(Future.sequence(futures), 5 seconds) // should flush after 2sec
 
     adder.intValue shouldBe records.sum
+    counter.intValue shouldBe records.size / batchSize
+
+    batcher.shutdown()
+  }
+
+  test("batcher seriously works concurrently") {
+    val batchSize = 1
+    val (batcher, adder, counter) = mkTestBatcher(batchSize)
+    val records = (1 to 10000)
+    val latch = new CountDownLatch(1)
+
+    val futures = records.map(i => Future {
+      latch.await()
+      batcher.add(i)
+    })
+
+    Thread.sleep(1000L)
+    latch.countDown()
+    Await.result(Future.sequence(futures), 5 seconds) // should flush after 2sec
+
+    adder.intValue shouldBe records.sum
+    counter.intValue shouldBe records.size / batchSize
 
     batcher.shutdown()
   }
@@ -106,17 +168,17 @@ class BatcherTest
   def mkTestBatcher( maxOutstandingCount: Int
                    ): (Batcher[Int], AtomicInteger, AtomicInteger) = {
     val adder = new AtomicInteger()
-    val callCounter = new AtomicInteger()
+    val counter = new AtomicInteger()
 
     val batcher = Batcher[Int](
       "test"
     , maxOutstandingCount
     , 2 seconds
     ) { records =>
-      callCounter.incrementAndGet()
+      counter.incrementAndGet()
       records.foreach(i => adder.addAndGet(i))
     }
 
-    (batcher, adder, callCounter)
+    (batcher, adder, counter)
   }
 }

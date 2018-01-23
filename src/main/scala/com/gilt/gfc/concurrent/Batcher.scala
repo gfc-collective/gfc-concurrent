@@ -1,12 +1,12 @@
 package com.gilt.gfc.concurrent
 
-import java.util.concurrent.{Executors, ScheduledFuture, ScheduledExecutorService => JScheduledExecutorService}
+import java.util.concurrent.{Executors, ScheduledExecutorService => JScheduledExecutorService}
 import java.util.concurrent.atomic.AtomicReference
 
 import com.gilt.gfc.logging.Loggable
 
 import scala.annotation.tailrec
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration._
 import scala.util.control.NonFatal
 
 
@@ -48,6 +48,7 @@ object Batcher {
              )( submitBatch: (Iterable[R]) => Unit
              ): Batcher[R] = {
     require(maxOutstandingCount > 0, s"maxOutstandingCount must be >0")
+    require(maxOutstandingDuration > 0.seconds, s"maxOutstandingDuration must be >0")
 
     new BatcherImpl[R](
       name
@@ -92,7 +93,6 @@ class BatcherImpl[R] (
 
   private def schedule(): Unit = {
     if (isRunning) {
-      import scala.concurrent.duration._
       val elapsed = (System.currentTimeMillis() - lastSubmit) millis
       val flushNow = elapsed >= maxOutstandingDuration
       val nextRun = if (flushNow) maxOutstandingDuration else maxOutstandingDuration - elapsed
