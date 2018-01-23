@@ -40,14 +40,14 @@ class TimeLimitedFutureSpec extends WordSpec with Matchers {
         elapsed should be <= 2000l
       }
 
-      "return the timeout if the original Future does not timeouts of its own" in {
+      "return the timeout if the original Future does not timeout of its own" in {
         val now = System.currentTimeMillis
-        val timingOutLater = Timeouts.timeout(Duration(1500, "milliseconds"))
+        val timingOutLater = Timeouts.timeout(Duration(2, "seconds"))
         val future = timingOutLater.withTimeout(Duration(1, "seconds"))
         a [TimeoutException] should be thrownBy  { Await.result(future, Duration(10, "seconds")) }
         val elapsed: Long = (System.currentTimeMillis - now)
         elapsed should be >= 1000l
-        elapsed should be <= 1100l
+        elapsed should be <= 1500l
       }
     }
 
