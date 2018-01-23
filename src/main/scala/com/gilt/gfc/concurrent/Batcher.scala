@@ -1,6 +1,6 @@
 package com.gilt.gfc.concurrent
 
-import java.util.concurrent.{ScheduledExecutorService => JScheduledExecutorService, Executors}
+import java.util.concurrent.{Executors, ScheduledFuture, ScheduledExecutorService => JScheduledExecutorService}
 import java.util.concurrent.atomic.AtomicReference
 
 import com.gilt.gfc.logging.Loggable
@@ -81,11 +81,25 @@ class BatcherImpl[R] (
   private[this]
   var isRunning = true
 
-  // Flush buffer periodically
+  @volatile
   private[this]
-  val task = executor.asScala.scheduleAtFixedRate(maxOutstandingDuration, maxOutstandingDuration) {
+  var lastSubmit = System.currentTimeMillis()
+
+  // Flush buffer periodically
+  @volatile
+  private[this]
+  var task = executor.asScala.schedule(maxOutstandingDuration)(schedule())
+
+  private def schedule(): Unit = {
     if (isRunning) {
-      flush()
+      import scala.concurrent.duration._
+      val elapsed = (System.currentTimeMillis() - lastSubmit) millis
+      val flushNow = elapsed >= maxOutstandingDuration
+      val nextRun = if (flushNow) maxOutstandingDuration else maxOutstandingDuration - elapsed
+      task = executor.asScala.schedule(nextRun)(schedule())
+      if (flushNow) {
+        flush()
+      }
     }
   }
 
@@ -134,6 +148,7 @@ class BatcherImpl[R] (
   private[this]
   def safeSubmitBatch(records: Vector[R]): Unit = {
     if (!records.isEmpty) {
+      lastSubmit = System.currentTimeMillis()
       try {
         submitBatch(records)
       } catch {
