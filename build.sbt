@@ -12,6 +12,8 @@ scalacOptions += "-target:jvm-1.7"
 
 javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
 
+fork := true
+
 libraryDependencies ++= Seq(
   "com.gilt" %% "gfc-logging" % "0.0.8",
   "com.gilt" %% "gfc-time" % "0.0.7" % Test,
