@@ -54,19 +54,17 @@ class TimeLimitedFutureSpec extends WordSpec with Matchers {
     // an example of how it could be used
     "used in our most common use case" should {
       "fit nicely" in {
-        val call: Future[String] = svcCall(10).withTimeout(Duration(50, "milliseconds")).recover {
-          case t: TimeoutException => "recover.timeout"
+        val call: Future[String] = svcCall(1000).withTimeout(Duration(5000, "milliseconds")).recover {
+          case _: TimeoutException => "recover.timeout"
           case other => s"recover.${other.getMessage}"
         }
-        call.onSuccess { case r: String => "ok" }
-        Await.result(call, Duration.Inf) should be ("data-10")
+        Await.result(call, Duration(10, "seconds")) should be ("data-1000")
 
-        val call2: Future[String] = svcCall(100).withTimeout(Duration(50, "milliseconds")).recover {
-          case t: TimeoutException => "recover.timeout"
+        val call2: Future[String] = svcCall(5000).withTimeout(Duration(1000, "milliseconds")).recover {
+          case _: TimeoutException => "recover.timeout"
           case other => s"recover.${other.getMessage}"
         }
-        call2.onSuccess { case r: String => "ok" }
-        Await.result(call2, Duration.Inf) should be ("recover.timeout")
+        Await.result(call2, Duration(10, "seconds")) should be ("recover.timeout")
       }
     }
   }
