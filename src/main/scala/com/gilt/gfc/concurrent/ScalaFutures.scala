@@ -174,7 +174,7 @@ object ScalaFutures {
    * @param jitter Enable jitter to randomize the delay, defaults to true.
    * @param f A function that returns a new Future
    * @param ec The ExecutionContext on which to retry the Future if it failed.
-   * @param log An optional log function to report failed iterations to. By default prints the thrown Exception to the console.
+   * @param log An optional log function to report failed iterations to. It defaults to no-op.
    * @return A successful Future if the Future succeeded within maxRetryTimes or a failed Future otherwise.
    */
   def retryWithExponentialDelay[T](maxRetryTimes: Long = Long.MaxValue,
