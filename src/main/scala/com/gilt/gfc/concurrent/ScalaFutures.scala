@@ -37,7 +37,7 @@ object ScalaFutures {
   }
 
   implicit class FutureTryOps[A](val f: Future[Try[A]]) extends AnyVal {
-    @deprecated("This does not work any longer with scala 2.12 due to the addition of Future.flatten, use tryFlatten")
+    @deprecated("This does not work any longer with scala 2.12 due to the addition of Future.flatten, use tryFlatten", "0.3.4")
     def flatten(implicit ec: ExecutionContext): Future[A] = tryFlatten
 
     def tryFlatten(implicit ec: ExecutionContext): Future[A] = f.flatMap(fromTry)
@@ -124,6 +124,7 @@ object ScalaFutures {
   /**
     *Version of [[scala.concurrent.Future.traverse]], that performs a sequential rather than a parallel map
     */
+  import scala.language.higherKinds
   def traverseSequential[A, B, M[X] <: TraversableOnce[X]](in: M[A])(fn: A => Future[B])(implicit cbf: CanBuildFrom[M[A], B, M[B]], executor: ExecutionContext): Future[M[B]] =
     in.foldLeft(Future.successful(cbf(in))) { (fr, a) =>
       for { r <- fr
@@ -178,9 +179,9 @@ object ScalaFutures {
    * @return A successful Future if the Future succeeded within maxRetryTimes or a failed Future otherwise.
    */
   def retryWithExponentialDelay[T](maxRetryTimes: Long = Long.MaxValue,
-                                   maxRetryTimeout: Deadline = 1 day fromNow,
-                                   initialDelay: Duration = 1 millisecond,
-                                   maxDelay: FiniteDuration = 1 day,
+                                   maxRetryTimeout: Deadline = 1.day.fromNow,
+                                   initialDelay: Duration = 1.millisecond,
+                                   maxDelay: FiniteDuration = 1.day,
                                    exponentFactor: Double = 2d,
                                    jitter: Boolean = true)
                                   (f: => Future[T])

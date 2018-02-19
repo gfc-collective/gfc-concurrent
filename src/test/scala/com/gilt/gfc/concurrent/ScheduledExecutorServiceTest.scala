@@ -13,7 +13,7 @@ import com.gilt.gfc.time.Timer
 import org.mockito.ArgumentCaptor
 import org.scalatest.FunSuite
 import org.scalatest.{Matchers => ScalaTestMatchers}
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
 import org.mockito.Matchers
 
@@ -40,7 +40,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       Future.successful(1)
     }
 
-    service.asyncScheduleWithFixedDelay(1 second, 2 seconds)(newFuture)
+    service.asyncScheduleWithFixedDelay(1.second, 2.seconds)(newFuture)
     val callable = ArgumentCaptor.forClass(classOf[Callable[Unit]])
 
     verify(mockJavaService).schedule(callable.capture, Matchers.eq(1000L), Matchers.eq(TimeUnit.MILLISECONDS))
@@ -78,7 +78,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       Future.successful(1)
     }
 
-    service.asyncScheduleAtFixedRate(1 second, 2 seconds)(newFuture)
+    service.asyncScheduleAtFixedRate(1.second, 2.seconds)(newFuture)
     val callable = ArgumentCaptor.forClass(classOf[Callable[Unit]])
 
     verify(mockJavaService).schedule(callable.capture, Matchers.eq(1000L), Matchers.eq(TimeUnit.MILLISECONDS))
@@ -192,7 +192,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
     val callCounter = new AtomicInteger
     val runnableCaptor = ArgumentCaptor.forClass(classOf[Runnable])
 
-    service.scheduleWithFixedDelay(1 second, 2 seconds)(callCounter.incrementAndGet)
+    service.scheduleWithFixedDelay(1.second, 2.seconds)(callCounter.incrementAndGet)
     verify(mockJavaService).scheduleWithFixedDelay(runnableCaptor.capture, Matchers.eq(1000L), Matchers.eq(2000L), Matchers.eq(TimeUnit.MILLISECONDS))
     verifyNoMoreInteractions(mockJavaService)
     callCounter.get should be(0)
@@ -246,7 +246,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
     val callCounter = new AtomicInteger
     val runnableCaptor = ArgumentCaptor.forClass(classOf[Runnable])
 
-    service.scheduleAtFixedRate(1 second, 2 seconds)(callCounter.incrementAndGet)
+    service.scheduleAtFixedRate(1.second, 2.seconds)(callCounter.incrementAndGet)
     verify(mockJavaService).scheduleAtFixedRate(runnableCaptor.capture, Matchers.eq(1000L), Matchers.eq(2000L), Matchers.eq(TimeUnit.MILLISECONDS))
     verifyNoMoreInteractions(mockJavaService)
     callCounter.get should be(0)
@@ -398,7 +398,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       override val executorService: JScheduledExecutorService = mockJavaService
     }
 
-    val wrapper = service.asyncScheduleWithFixedDelay(1 second, 1 seconds)(Future.successful(1))
+    val wrapper = service.asyncScheduleWithFixedDelay(1.second, 1.seconds)(Future.successful(1))
 
     wrapper.isCancelled
     wrapper.isDone
@@ -440,7 +440,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
     def newFuture(): Future[Int] = fail("should not have called newFuture")
 
     val caught = the [RuntimeException] thrownBy {
-      service.asyncScheduleWithFixedDelay(1 second, 2 seconds)(newFuture)
+      service.asyncScheduleWithFixedDelay(1.second, 2.seconds)(newFuture)
     }
 
     caught should be(toThrow)
@@ -458,7 +458,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       throw toThrow
     }
 
-    service.asyncScheduleWithFixedDelay(0 millis, TimeStepMs millis)(newFuture)
+    service.asyncScheduleWithFixedDelay(0.millis, TimeStepMs.millis)(newFuture)
 
     latch.await(10 * TimeStepMs, TimeUnit.MILLISECONDS) should be(true)
   }
@@ -477,7 +477,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       1
     }
 
-    service.asyncScheduleWithFixedDelay(TimeStepMs millis, TimeStepMs millis)(newFuture)
+    service.asyncScheduleWithFixedDelay(TimeStepMs.millis, TimeStepMs.millis)(newFuture)
 
     checkFuzzyTiming(TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
     checkFuzzyTiming(2 * TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
@@ -497,7 +497,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       1
     }
 
-    service.asyncScheduleAtFixedRate(TimeStepMs millis, TimeStepMs millis)(newFuture)
+    service.asyncScheduleAtFixedRate(TimeStepMs.millis, TimeStepMs.millis)(newFuture)
 
     checkFuzzyTiming(TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
     checkFuzzyTiming(TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
@@ -517,7 +517,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       1
     }
 
-    service.asyncScheduleAtFixedRate(0 millis, TimeStepMs millis)(newFuture)
+    service.asyncScheduleAtFixedRate(0.millis, TimeStepMs.millis)(newFuture)
 
     checkFuzzyTiming(0)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
     checkFuzzyTiming(2 * TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
@@ -537,7 +537,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       Future.successful(1)
     }
 
-    val future = service.asyncScheduleAtFixedRate(0 millis, TimeStepMs millis)(newFuture)
+    val future = service.asyncScheduleAtFixedRate(0.millis, TimeStepMs.millis)(newFuture)
 
     checkFuzzyTiming(0)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
     checkFuzzyTiming(TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
@@ -584,7 +584,7 @@ class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with 
       1
     }
 
-    val future = service.asyncScheduleAtFixedRate(0 millis, TimeStepMs millis)(newFuture)
+    val future = service.asyncScheduleAtFixedRate(0.millis, TimeStepMs.millis)(newFuture)
 
     checkFuzzyTiming(0)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))
     checkFuzzyTiming(TimeStepMs)(barrier.await(5 * TimeStepMs, TimeUnit.MILLISECONDS))

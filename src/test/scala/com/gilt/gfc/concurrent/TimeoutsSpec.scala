@@ -45,7 +45,7 @@ class TimeoutsSpec extends WordSpec with Matchers {
 
       "include the origin of the future" in {
         val here = new Exception()
-        val timingOut = Timeouts.timeout(1 millis)
+        val timingOut = Timeouts.timeout(1.millis)
         val thrown = the [TimeoutException] thrownBy { Await.result(timingOut, Duration(10, "seconds")) }
         thrown.getStackTrace.size shouldBe > (50)
         val thrownFrames = thrown.getStackTrace.map(f => f: AnyRef).drop(7)

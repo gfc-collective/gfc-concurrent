@@ -93,7 +93,7 @@ class BatcherImpl[R] (
 
   private def schedule(): Unit = {
     if (isRunning) {
-      val elapsed = (System.currentTimeMillis() - lastSubmit) millis
+      val elapsed = (System.currentTimeMillis() - lastSubmit).millis
       val flushNow = elapsed >= maxOutstandingDuration
       val nextRun = if (flushNow) maxOutstandingDuration else maxOutstandingDuration - elapsed
       task = executor.asScala.schedule(nextRun)(schedule())

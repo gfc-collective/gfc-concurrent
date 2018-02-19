@@ -4,7 +4,7 @@ import com.gilt.gfc.concurrent.Timeouts.timeout
 import com.gilt.gfc.concurrent.trace.LogFutureTraces
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
@@ -13,7 +13,7 @@ import scala.util.Success
 import scala.util.control.NonFatal
 
 
-class FutureBuilderSpec
+class ServiceFutureBuilderSpec
   extends FlatSpec
      with MockitoSugar {
 

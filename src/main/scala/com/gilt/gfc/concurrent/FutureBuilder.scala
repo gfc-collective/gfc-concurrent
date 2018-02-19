@@ -117,6 +117,7 @@ case class FutureBuilder[A,R] private (
            : FutureBuilder[A,R] = {
     require(n>0, "Num retries must be > 0")
     copy( addNumRetries = b => { f =>
+      import scala.language.implicitConversions
       implicit def log(t: Throwable) { if (b.passThroughExceptionHandler.isDefinedAt(t)) b.passThroughExceptionHandler(t) }
       ScalaFutures.retry(n)(f)
     } )

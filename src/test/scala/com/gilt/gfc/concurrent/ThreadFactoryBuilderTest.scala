@@ -1,7 +1,7 @@
 package com.gilt.gfc.concurrent
 
 import java.lang.Thread.UncaughtExceptionHandler
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, FunSuite}
 
 class ThreadFactoryBuilderTest extends FunSuite with Matchers with MockitoSugar {
@@ -28,7 +28,7 @@ class ThreadFactoryBuilderTest extends FunSuite with Matchers with MockitoSugar 
     t.getUncaughtExceptionHandler shouldBe Thread.currentThread.getThreadGroup
   }
 
-  test("withXXX") {
+  test("with...") {
     val group = new ThreadGroup("foo")
     val exh = mock[UncaughtExceptionHandler]
     val f = ThreadFactoryBuilder().

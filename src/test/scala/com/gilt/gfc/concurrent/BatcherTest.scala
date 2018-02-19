@@ -10,12 +10,12 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 import org.scalatest.concurrent.Eventually
-import org.scalatest.time.{Millis, Span}
+import org.scalatest.time.{Seconds, Span}
 
 
 class BatcherTest
   extends FunSuite with Matchers with Eventually {
-  implicit val patience = PatienceConfig(scaled(Span(500, Millis)))
+  override implicit val patienceConfig = PatienceConfig(timeout = scaled(Span(3, Seconds)), interval = scaled(Span(3, Seconds)))
 
   test("check invalid input") {
     an [IllegalArgumentException] should be thrownBy {

@@ -11,6 +11,7 @@ import scala.util.{Failure, Success, Try}
 import org.scalatest.{FunSuite, Matchers}
 
 class ScalaFuturesTest extends FunSuite with Matchers {
+  import scala.language.implicitConversions
   implicit def logSuppressor(t: Throwable): Unit = {}
 
   val cachedEc = ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
@@ -272,7 +273,7 @@ class ScalaFuturesTest extends FunSuite with Matchers {
     }
 
     val start = System.currentTimeMillis()
-    val thrown = the [Exception] thrownBy { await(ScalaFutures.retryWithExponentialDelay(maxRetryTimeout = 1000 millis fromNow, initialDelay = 500 millis, maxDelay = 500 millis, jitter = false)(function)) }
+    val thrown = the [Exception] thrownBy { await(ScalaFutures.retryWithExponentialDelay(maxRetryTimeout = 1000.millis.fromNow, initialDelay = 500.millis, maxDelay = 500.millis, jitter = false)(function)) }
     thrown.getMessage shouldBe "boom"
     (System.currentTimeMillis() - start) should be (1000L +- 200L)
     count shouldBe 3
@@ -298,8 +299,8 @@ class ScalaFuturesTest extends FunSuite with Matchers {
     times += System.currentTimeMillis()
 
     // Delay series should be (ms): 100, 150, 225, 337, 500, 500
-    val future = ScalaFutures.retryWithExponentialDelay(initialDelay = 100 millis,
-                                                        maxDelay = 500 millis,
+    val future = ScalaFutures.retryWithExponentialDelay(initialDelay = 100.millis,
+                                                        maxDelay = 500.millis,
                                                         exponentFactor = 1.5,
                                                         jitter = false)(nextFuture)
 
