@@ -8,9 +8,9 @@ scalaVersion := "2.12.9"
 
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
-scalacOptions ++= Seq("-target:jvm-1.7", "-unchecked", "-deprecation", "-feature")
+scalacOptions ++= Seq("-target:jvm-1.8", "-unchecked", "-deprecation", "-feature")
 
-javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 fork := true
 
