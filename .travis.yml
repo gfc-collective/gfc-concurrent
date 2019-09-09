@@ -3,6 +3,7 @@ scala:
   - 2.12.9
   - 2.11.12
 jdk:
-  - oraclejdk8
+  - openjdk8
+  - openjdk11
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport && sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 after_success: sbt ++$TRAVIS_SCALA_VERSION coveralls
