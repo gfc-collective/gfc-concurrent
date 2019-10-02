@@ -43,14 +43,14 @@ ScoverageKeys.coverageFailOnMinimum := true
 
 ScoverageKeys.coverageMinimum := 85.0
 
-licenses := Seq("Apache-style" -> url("https://raw.githubusercontent.com/gilt/gfc-concurrent/master/LICENSE"))
+licenses := Seq("Apache-style" -> url("https://raw.githubusercontent.com/gfc-collective/gfc-concurrent/master/LICENSE"))
 
-homepage := Some(url("https://github.com/gilt/gfc-concurrent"))
+homepage := Some(url("https://github.com/gfc-collective/gfc-concurrent"))
 
 pomExtra := (
   <scm>
-    <url>https://github.com/gilt/gfc-concurrent.git</url>
-    <connection>scm:git:git@github.com:gilt/gfc-concurrent.git</connection>
+    <url>https://github.com/gfc-collective/gfc-concurrent.git</url>
+    <connection>scm:git:git@github.com:gfc-collective/gfc-concurrent.git</connection>
   </scm>
   <developers>
     <developer>
@@ -70,4 +70,3 @@ pomExtra := (
     </developer>
   </developers>
 )
-
