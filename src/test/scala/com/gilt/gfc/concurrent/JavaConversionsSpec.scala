@@ -5,11 +5,14 @@ import java.util.concurrent.{ExecutorService => JExecutorService, ScheduledExecu
 import com.gilt.gfc.concurrent.{ScheduledExecutorService => GScheduledExecutorService}
 
 import org.scalatest.mockito.{MockitoSugar => ScalaTestMockitoSugar}
-import org.scalatest.{WordSpecLike, Matchers => ScalaTestMatchers}
+import org.scalatest.{Matchers => ScalaTestMatchers}
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class JavaConversionsSpec extends WordSpecLike
-  with ScalaTestMatchers
-  with ScalaTestMockitoSugar {
+class JavaConversionsSpec extends AnyWordSpecLike
+  with Matchers
+  with MockitoSugar {
 
   "When converting java `ScheduledExecutorService`, and JavaConversions is imported" must {
     "compile" in {
