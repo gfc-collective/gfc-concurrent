@@ -3,9 +3,10 @@ package com.gilt.gfc.concurrent
 import java.util.concurrent.{ TimeoutException, TimeUnit }
 import scala.concurrent.duration._
 import scala.concurrent.{ Future, Await }
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class TimeoutsSpec extends WordSpec with Matchers {
+class TimeoutsSpec extends AnyWordSpec with Matchers {
   import TimeoutsSpec._
 
   "Timeouts" when {

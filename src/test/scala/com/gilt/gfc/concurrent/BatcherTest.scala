@@ -3,7 +3,6 @@ package com.gilt.gfc.concurrent
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -11,10 +10,12 @@ import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Seconds, Span}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 
 class BatcherTest
-  extends FunSuite with Matchers with Eventually {
+  extends AnyFunSuite with Matchers with Eventually {
   override implicit val patienceConfig = PatienceConfig(timeout = scaled(Span(3, Seconds)), interval = scaled(Span(3, Seconds)))
 
   test("check invalid input") {

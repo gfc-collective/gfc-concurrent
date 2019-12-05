@@ -11,13 +11,14 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import com.gilt.gfc.time.Timer
 import org.mockito.ArgumentCaptor
-import org.scalatest.FunSuite
 import org.scalatest.{Matchers => ScalaTestMatchers}
-import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class ScheduledExecutorServiceTest extends FunSuite with ScalaTestMatchers with MockitoSugar with Eventually {
+class ScheduledExecutorServiceTest extends AnyFunSuite with Matchers with MockitoSugar with Eventually {
   override implicit val patienceConfig = PatienceConfig(timeout = scaled(Span(3, Seconds)), interval = scaled(Span(3, Seconds)))
 
   val javaService = Executors.newScheduledThreadPool(20)

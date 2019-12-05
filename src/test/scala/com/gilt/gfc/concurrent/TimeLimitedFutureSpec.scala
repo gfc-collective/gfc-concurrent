@@ -4,9 +4,10 @@ import java.util.concurrent.TimeoutException
 import scala.concurrent.{ Future, Await }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class TimeLimitedFutureSpec extends WordSpec with Matchers {
+class TimeLimitedFutureSpec extends AnyWordSpec with Matchers {
   import TimeLimitedFutureSpec._
 
   "RichFuture" when {
