@@ -2,19 +2,20 @@ package com.gilt.gfc.concurrent
 
 import com.gilt.gfc.concurrent.Timeouts.timeout
 import com.gilt.gfc.concurrent.trace.LogFutureTraces
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers._
-import org.scalatest.mockito.MockitoSugar
+import matchers.should.Matchers._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.{postfixOps, reflectiveCalls}
 import scala.util.Success
 import scala.util.control.NonFatal
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers
+import org.scalatest.flatspec.AnyFlatSpec
 
 
 class ServiceFutureBuilderSpec
-  extends FlatSpec
+  extends AnyFlatSpec
      with MockitoSugar {
 
   implicit private

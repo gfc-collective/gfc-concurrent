@@ -8,9 +8,10 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class ScalaFuturesTest extends FunSuite with Matchers {
+class ScalaFuturesTest extends AnyFunSuite with Matchers {
   import scala.language.implicitConversions
   implicit def logSuppressor(t: Throwable): Unit = {}
 
