@@ -2,7 +2,6 @@ package com.gilt.gfc.concurrent
 
 import com.gilt.gfc.concurrent.Timeouts.timeout
 import com.gilt.gfc.concurrent.trace.LogFutureTraces
-import matchers.should.Matchers._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
@@ -10,7 +9,7 @@ import scala.language.{postfixOps, reflectiveCalls}
 import scala.util.Success
 import scala.util.control.NonFatal
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.matchers
+import org.scalatest.matchers.should.Matchers._
 import org.scalatest.flatspec.AnyFlatSpec
 
 
