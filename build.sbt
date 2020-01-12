@@ -6,7 +6,7 @@ organization := "com.gilt"
 
 scalaVersion := "2.12.10"
 
-crossScalaVersions := Seq(scalaVersion.value)
+crossScalaVersions := Seq(scalaVersion.value, "2.13.1")
 
 scalacOptions ++= Seq("-target:jvm-1.8", "-unchecked", "-deprecation", "-feature")
 
