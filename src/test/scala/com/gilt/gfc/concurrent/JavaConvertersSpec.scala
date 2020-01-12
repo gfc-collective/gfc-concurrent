@@ -2,7 +2,7 @@ package com.gilt.gfc.concurrent
 
 import java.util.concurrent.{ExecutorService => JExecutorService, ScheduledExecutorService => JScheduledExecutorService}
 
-import org.scalatest.mockito.{MockitoSugar => ScalaTestMockitoSugar}
+import org.scalatestplus.mockito.{MockitoSugar => ScalaTestMockitoSugar}
 import org.scalatest.{Matchers => ScalaTestMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers
