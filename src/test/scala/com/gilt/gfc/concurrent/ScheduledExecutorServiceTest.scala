@@ -556,7 +556,7 @@ class ScheduledExecutorServiceTest extends AnyFunSuite with Matchers with Mockit
     scalaExecutor.submit {
       n.incrementAndGet
     }
-    eventually({ n.intValue should be > 0 })(patienceConfig, Position.here)
+    eventually { n.intValue should be > 0 }
   }
 
   test("single-thread scheduled executor #execute(javaRunnable) sanity check") {
@@ -568,7 +568,7 @@ class ScheduledExecutorServiceTest extends AnyFunSuite with Matchers with Mockit
       override def run(): Unit = n.incrementAndGet
     }
     scalaExecutor.execute(runnable)
-    eventually({ n.intValue should be > 0 })(patienceConfig, Position.here)
+    eventually { n.intValue should be > 0 }
   }
 
   test("cancel does not reschedule") {
