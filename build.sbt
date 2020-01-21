@@ -2,7 +2,7 @@ import scoverage.ScoverageKeys
 
 name := "gfc-concurrent"
 
-organization := "com.gilt"
+organization := "org.gfccollective"
 
 scalaVersion := "2.12.10"
 
@@ -15,8 +15,8 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 fork := true
 
 libraryDependencies ++= Seq(
-  "com.gilt" %% "gfc-logging" % "0.0.8",
-  "com.gilt" %% "gfc-time" % "0.0.7" % Test,
+  "org.gfccollective" %% "gfc-logging" % "1.0.0",
+  "org.gfccollective" %% "gfc-time" % "1.0.0" % Test,
   "org.scalatest" %% "scalatest" % "3.1.0" % Test,
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.mockito" % "mockito-core" % "3.2.4" % Test

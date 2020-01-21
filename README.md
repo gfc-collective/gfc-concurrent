@@ -1,4 +1,4 @@
-# gfc-concurrent [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gilt/gfc-concurrent_2.12/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.gilt/gfc-concurrent_2.12) [![Build Status](https://travis-ci.org/gilt/gfc-concurrent.svg?branch=master)](https://travis-ci.org/gilt/gfc-concurrent) [![Coverage Status](https://coveralls.io/repos/github/gilt/gfc-concurrent/badge.svg?branch=master)](https://coveralls.io/github/gilt/gfc-concurrent?branch=master) [![Join the chat at https://gitter.im/gilt/gfc](https://badges.gitter.im/gilt/gfc.svg)](https://gitter.im/gilt/gfc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# gfc-concurrent [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.gfccollective/gfc-concurrent_2.12/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.gfccollective/gfc-concurrent_2.12) [![Build Status](https://travis-ci.org/gilt/gfc-concurrent.svg?branch=master)](https://travis-ci.org/gilt/gfc-concurrent) [![Coverage Status](https://coveralls.io/repos/github/gilt/gfc-concurrent/badge.svg?branch=master)](https://coveralls.io/github/gilt/gfc-concurrent?branch=master) [![Join the chat at https://gitter.im/gilt/gfc](https://badges.gitter.im/gilt/gfc.svg)](https://gitter.im/gilt/gfc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A library that contains scala concurrency helper code. Part of the [Gilt Foundation Classes](https://github.com/gilt?q=gfc).
 
@@ -9,35 +9,35 @@ The latest version is 0.3.8, which is cross-built against Scala 2.10.x, 2.11.x a
 If you're using SBT, add the following line to your build file:
 
 ```scala
-libraryDependencies += "com.gilt" %% "gfc-concurrent" % "0.3.8"
+libraryDependencies += "org.gfccollective" %% "gfc-concurrent" % "0.3.8"
 ```
 
-For Maven and other build tools, you can visit [search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Ccom.gilt%20gfc).
+For Maven and other build tools, you can visit [search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Corg.gfccollective%20gfc).
 (This search will also list other available libraries from the gilt fundation classes.)
 
 ## Contents and Example Usage
 
-### com.gilt.gfc.concurrent.ScalaFutures
+### org.gfccollective.concurrent.ScalaFutures
 
 This object contains a bunch of sugar and little helpers that make working with scala futures a bit easier:
 
 * Limit how long a scala Future can take by giving it a timeout Duration, after which it fails with a `java.util.concurrent.TimeoutException`
 ```scala
   import scala.concurrent.duration._
-  import com.gilt.gfc.concurrent.ScalaFutures._
+  import org.gfccollective.concurrent.ScalaFutures._
   val futureWithTimeout = myFuture.withTimeout(1 minute)
 ```
 * Retry a Future until it succeeds, with or without delay:
 ```scala
   import scala.concurrent.duration._
-  import com.gilt.gfc.concurrent.ScalaFutures._
+  import org.gfccollective.concurrent.ScalaFutures._
   def remoteCall: Future[Response] = ???
   // Retry the remote call up to 10 times until it succeeds
   val response: Future[Response] = retry(10)(remoteCall)
 ```
 ```scala
   import scala.concurrent.duration._
-  import com.gilt.gfc.concurrent.ScalaFutures._
+  import org.gfccollective.concurrent.ScalaFutures._
   def remoteCall: Future[Response] = ???
   // Retry the remote call up to 10 times until it succeeds, with an exponential backoff,
   // starting at 10 ms and doubling each iteration until it reaches 1 second, i.e.
@@ -83,13 +83,13 @@ the Future is a failed Future with the same Exception.
   val noString: Future[Option[String]] = ScalaFuture.FutureNone
 ```
 
-### com.gilt.gfc.concurrent.SameThreadExecutionContext
+### org.gfccollective.concurrent.SameThreadExecutionContext
 
 `ExecutionContext` that executes an asynchronous action synchronously on the same `Thread`. This can be
 useful for small code blocks that don't need to be run on a separate thread.
 The object can either be used explicitly or imported implicitly like this:
 ```scala
-  import com.gilt.gfc.concurrent.ScalaFutures.Implicits._
+  import org.gfccollective.concurrent.ScalaFutures.Implicits._
   someFuture.map(_ + 1)
 ```
 __Note__: Using this ExecutionContext does _not_ mean that the Thread that executes this piece of code will execute the
@@ -98,7 +98,7 @@ functions) does _not_ hand of the execution of the map() function to another thr
 As a result this may delay onComplete notifications for other interested parties and thus should only be used in cases
 where a small piece of code needs to be executed.
 
-### com.gilt.gfc.concurrent.ExecutorService / ScheduledExecutorService / AsyncScheduledExecutorService
+### org.gfccollective.concurrent.ExecutorService / ScheduledExecutorService / AsyncScheduledExecutorService
 
 These are scala adaptations and enhancements of `java.util.concurrent.ExecutorService` and `java.util.concurrent.ScheduledExecutorService`.
 Besides offering functions to execute and schedule the execution of scala functions, the `AsyncScheduledExecutorService`
@@ -116,7 +116,7 @@ as the (synchronous) scheduling functions. I.e. they are guaranteed to not execu
   val future = scalaExecutor.asyncScheduleAtFixedRate(1 minute, 1 minute)(newTask)
 ```
 
-### com.gilt.gfc.concurrent.JavaConverters / JavaConversions
+### org.gfccollective.concurrent.JavaConverters / JavaConversions
 
 Implicit and explicit functions to convert java.util.concurrent.(Scheduled)ExecutorService instances to the above enhanced types.
 ```scala
@@ -124,14 +124,14 @@ Implicit and explicit functions to convert java.util.concurrent.(Scheduled)Execu
   val javaExecutor: ScheduledExecutorService = ???
     
   // Convert it into an AsyncScheduledExecutorService (explicit)
-  import com.gilt.gfc.concurrent.JavaConverters._
+  import org.gfccollective.concurrent.JavaConverters._
   val scalaExecutor1: AsyncScheduledExecutorService = javaExecutor.asScala
 
   // Convert it into an AsyncScheduledExecutorService (implicit)
-  import com.gilt.gfc.concurrent.JavaConversions._
+  import org.gfccollective.concurrent.JavaConversions._
   val scalaExecutor2: AsyncScheduledExecutorService = javaExecutor 
 ```
-### com.gilt.gfc.concurrent.ThreadFactoryBuilder and ThreadGroupBuilder
+### org.gfccollective.concurrent.ThreadFactoryBuilder and ThreadGroupBuilder
 
 Factories that allow the creation of a set of threads with a common name, group, daemon and other properties.
 This is e.g. useful to identify background threads and make sure they do not prevent the jvm from shutting down
