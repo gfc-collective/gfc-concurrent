@@ -167,23 +167,6 @@ class ScheduledExecutorServiceTest extends AnyFunSuite with Matchers with Mockit
     callCounter.get should be(1)
   }
 
-  test("scheduleWithFixedDelay(Long, Long, TimeUnit)(=> Unit)") {
-    val mockJavaService = mock[JScheduledExecutorService]
-    val service = new JScheduledExecutorServiceWrapper {
-      override val executorService: JScheduledExecutorService = mockJavaService
-    }
-
-    val callCounter = new AtomicInteger
-    val runnableCaptor: ArgumentCaptor[Runnable] = ArgumentCaptor.forClass(classOf[Runnable])
-
-    service.scheduleWithFixedDelay(1000L, 2000L, TimeUnit.MILLISECONDS)(callCounter.incrementAndGet)
-    verify(mockJavaService).scheduleWithFixedDelay(runnableCaptor.capture, ArgumentMatchers.eq(1000L), ArgumentMatchers.eq(2000L), ArgumentMatchers.eq(TimeUnit.MILLISECONDS))
-    verifyNoMoreInteractions(mockJavaService)
-    callCounter.get should be(0)
-    runnableCaptor.getValue.run
-    callCounter.get should be(1)
-  }
-
   test("scheduleWithFixedDelay(FiniteDuration, FiniteDuration)(=> Unit)") {
     val mockJavaService = mock[JScheduledExecutorService]
     val service = new JScheduledExecutorServiceWrapper {
@@ -214,23 +197,6 @@ class ScheduledExecutorServiceTest extends AnyFunSuite with Matchers with Mockit
     val runnableCaptor: ArgumentCaptor[Runnable] = ArgumentCaptor.forClass(classOf[Runnable])
 
     service.scheduleAtFixedRate(runnable, 1000L, 2000L, TimeUnit.MILLISECONDS)
-    verify(mockJavaService).scheduleAtFixedRate(runnableCaptor.capture, ArgumentMatchers.eq(1000L), ArgumentMatchers.eq(2000L), ArgumentMatchers.eq(TimeUnit.MILLISECONDS))
-    verifyNoMoreInteractions(mockJavaService)
-    callCounter.get should be(0)
-    runnableCaptor.getValue.run
-    callCounter.get should be(1)
-  }
-
-  test("scheduleAtFixedRate(Long, Long, TimeUnit)(=> Unit)") {
-    val mockJavaService = mock[JScheduledExecutorService]
-    val service = new JScheduledExecutorServiceWrapper {
-      override val executorService: JScheduledExecutorService = mockJavaService
-    }
-
-    val callCounter = new AtomicInteger
-    val runnableCaptor: ArgumentCaptor[Runnable] = ArgumentCaptor.forClass(classOf[Runnable])
-
-    service.scheduleAtFixedRate(1000L, 2000L, TimeUnit.MILLISECONDS)(callCounter.incrementAndGet)
     verify(mockJavaService).scheduleAtFixedRate(runnableCaptor.capture, ArgumentMatchers.eq(1000L), ArgumentMatchers.eq(2000L), ArgumentMatchers.eq(TimeUnit.MILLISECONDS))
     verifyNoMoreInteractions(mockJavaService)
     callCounter.get should be(0)
