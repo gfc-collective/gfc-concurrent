@@ -4,9 +4,9 @@ name := "gfc-concurrent"
 
 organization := "org.gfccollective"
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.13.1"
 
-crossScalaVersions := Seq(scalaVersion.value)
+crossScalaVersions := Seq(scalaVersion.value, "2.12.10")
 
 scalacOptions ++= Seq("-target:jvm-1.8", "-unchecked", "-deprecation", "-feature")
 

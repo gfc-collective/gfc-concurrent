@@ -34,6 +34,6 @@ trait JExecutorServiceWrapper extends ExecutorService {
   override def isTerminated(): Boolean = executorService.isTerminated
   override def isShutdown(): Boolean = executorService.isShutdown
   override def shutdownNow(): JList[Runnable] = executorService.shutdownNow
-  override def shutdown(){ executorService.shutdown }
-  override def execute(r: Runnable) { executorService.execute(r) }
+  override def shutdown() = { executorService.shutdown }
+  override def execute(r: Runnable) = { executorService.execute(r) }
 }

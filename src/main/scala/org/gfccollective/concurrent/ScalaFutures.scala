@@ -51,21 +51,21 @@ object ScalaFutures {
   /**
    * Asynchronously tests whether a predicate holds for some of the elements of a collection of futures
    */
-  def exists[T](futures: TraversableOnce[Future[T]])
+  def exists[T](futures: Iterable[Future[T]])
                (predicate: T => Boolean)
                (implicit executor: ExecutionContext): Future[Boolean] = {
     if (futures.isEmpty) Future.successful(false)
-    else Future.find(futures)(predicate).map(_.isDefined)
+    else Future.find(futures.toSeq)(predicate).map(_.isDefined)
   }
 
   /**
    * Asynchronously tests whether a predicate holds for all elements of a collection of futures
    */
-  def forall[T](futures: TraversableOnce[Future[T]])
+  def forall[T](futures: Iterable[Future[T]])
                (predicate: T => Boolean)
                (implicit executor: ExecutionContext): Future[Boolean] = {
     if (futures.isEmpty) Future.successful(true)
-    else Future.find(futures)(!predicate(_)).map(_.isEmpty)
+    else Future.find(futures.toSeq)(!predicate(_)).map(_.isEmpty)
   }
 
   /**
