@@ -42,7 +42,7 @@ pomIncludeRepository := { _ => false }
 
 ScoverageKeys.coverageFailOnMinimum := true
 
-ScoverageKeys.coverageMinimum := 85.0
+ScoverageKeys.coverageMinimum := 84.0
 
 licenses := Seq("Apache-style" -> url("https://raw.githubusercontent.com/gfc-collective/gfc-concurrent/master/LICENSE"))
 
