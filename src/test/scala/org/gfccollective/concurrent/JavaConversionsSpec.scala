@@ -5,7 +5,6 @@ import java.util.concurrent.{ExecutorService => JExecutorService, ScheduledExecu
 import org.gfccollective.concurrent.{ScheduledExecutorService => GScheduledExecutorService}
 
 import org.scalatestplus.mockito.{MockitoSugar => ScalaTestMockitoSugar}
-import org.scalatest.{Matchers => ScalaTestMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

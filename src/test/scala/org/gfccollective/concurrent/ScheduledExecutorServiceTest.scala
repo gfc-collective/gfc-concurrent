@@ -11,7 +11,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import org.gfccollective.time.Timer
 import org.mockito.ArgumentCaptor
-import org.scalatest.{Matchers => ScalaTestMatchers}
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers
 import org.scalatestplus.mockito.MockitoSugar
