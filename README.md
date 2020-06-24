@@ -1,7 +1,8 @@
 # gfc-concurrent [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.gfccollective/gfc-concurrent_2.12/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.gfccollective/gfc-concurrent_2.12) [![Build Status](https://github.com/gfc-collective/gfc-concurrent/workflows/Scala%20CI/badge.svg)](https://github.com/gfc-collective/gfc-concurrent/actions) [![Coverage Status](https://coveralls.io/repos/gfc-collective/gfc-concurrent/badge.svg?branch=master&service=github)](https://coveralls.io/github/gfc-collective/gfc-concurrent?branch=master)
 
 A library that contains scala concurrency helper code. 
-A fork and new home of the now unmaintained Gilt Foundation Classes (`com.gilt.gfc`), now called the [GFC Collective](https://github.com/gfc-collective), maintained by some of the original authors.
+
+This library is a fork and new home of the now unmaintained Gilt Foundation Classes (`com.gilt.gfc`), now called the [GFC Collective](https://github.com/gfc-collective), maintained by some of the original authors.
 
 ## Getting gfc-concurrent
 
