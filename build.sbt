@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.gfccollective" %% "gfc-time" % "1.0.0" % Test,
   "org.scalatest" %% "scalatest" % "3.2.0" % Test,
   "org.scalatestplus" %% "mockito-3-2" % "3.1.2.0" % Test,
-  "org.mockito" % "mockito-core" % "3.3.3" % Test,
+  "org.mockito" % "mockito-core" % "3.4.0" % Test,
 )
 
 releaseCrossBuild := true
