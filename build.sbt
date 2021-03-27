@@ -44,7 +44,7 @@ ScoverageKeys.coverageFailOnMinimum := true
 
 ScoverageKeys.coverageMinimum := 84.0
 
-licenses := Seq("Apache-style" -> url("https://raw.githubusercontent.com/gfc-collective/gfc-concurrent/master/LICENSE"))
+licenses := Seq("Apache-style" -> url("https://raw.githubusercontent.com/gfc-collective/gfc-concurrent/main/LICENSE"))
 
 homepage := Some(url("https://github.com/gfc-collective/gfc-concurrent"))
 
