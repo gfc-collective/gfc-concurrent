@@ -17,7 +17,7 @@ fork := true
 libraryDependencies ++= Seq(
   "org.gfccollective" %% "gfc-logging" % "1.0.0",
   "org.gfccollective" %% "gfc-time" % "1.0.0" % Test,
-  "org.scalatest" %% "scalatest" % "3.2.6" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   "org.scalatestplus" %% "mockito-3-4" % "3.2.7.0" % Test,
   "org.mockito" % "mockito-core" % "3.8.0" % Test,
 )
